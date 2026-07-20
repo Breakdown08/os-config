@@ -14,26 +14,50 @@ setmetatable(PythonLanguage, { __index = LanguageBase })
 ---@return PythonLanguage
 function PythonLanguage.new(name)
     local self = setmetatable({}, PythonLanguage)
-    self.name = name or "pyright"
+    self.name = name or "ty"
+    
+    -- Настройка автоформатирования через Ruff
     self.autoformat_config = {
-        formatter = "black",
-        config_file = nil
+        formatter = "ruff",
+        config_file = nil  -- ruff читает настройки из pyproject.toml
     }
+    
+    -- Настройка LSP с Ty (от Astral) для линтинга и типов
     self.lsp_config = {
-        server = "pyright",
-        settings = {
-            pyright = {
-                typeCheckingMode = "basic",
-                useLibraryCodeForTypes = true,
-            }
+            server = "ty",
+            cmd = { "ty", "server" },  -- правильная команда для LSP сервера
         }
-    }    
+    
+    -- Ruff для форматирования на сохранение (используем напрямую, быстро)
     vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*.py",
         callback = function()
-            vim.lsp.buf.format({ async = false, timeout_ms = 3000 })
+            local file_path = vim.fn.expand("%:p")
+            -- Форматируем через ruff (быстро и асинхронно)
+            vim.fn.jobstart({ "uvx", "ruff", "format", file_path }, {
+                on_exit = function()
+                    -- Перезагружаем файл после форматирования
+                    vim.cmd("edit!")
+                end,
+            })
         end,
     })
+    
+    -- Ruff для линтинга и автоисправления (опционально)
+    vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "*.py",
+        callback = function()
+            local file_path = vim.fn.expand("%:p")
+            -- Запускаем ruff check с автоисправлением
+            vim.fn.jobstart({ "uvx", "ruff", "check", "--fix", file_path }, {
+                on_exit = function()
+                    -- Обновляем буфер после исправлений
+                    vim.cmd("checktime")
+                end,
+            })
+        end,
+    })
+    
     return self
 end
 
@@ -44,7 +68,6 @@ function PythonLanguage:create_start_template_project()
 
 def main():
     print("Hello from ]] .. self.name .. [[")
-    # Add your code here
 
 if __name__ == "__main__":
     main()
