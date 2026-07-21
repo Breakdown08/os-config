@@ -1,78 +1,61 @@
 local LanguageBase = require("core.languages.class_language_base")
 
 ---@class PythonLanguage : LanguageBase
----@field name string
----@field autoformat_config table
----@field lsp_config table
 local PythonLanguage = {}
 PythonLanguage.__index = PythonLanguage
 
----Наследование от LanguageBase
-setmetatable(PythonLanguage, { __index = LanguageBase })
+setmetatable(PythonLanguage, {
+    __index = LanguageBase,
+})
 
----@param name string?
+---@param id string
 ---@return PythonLanguage
-function PythonLanguage.new(name)
-    local self = setmetatable({}, PythonLanguage)
-    self.name = name or "ty"
-    
-    -- Настройка автоформатирования через Ruff
-    self.autoformat_config = {
-        formatter = "ruff",
-        config_file = nil  -- ruff читает настройки из pyproject.toml
-    }
-    
-    -- Настройка LSP с Ty (от Astral) для линтинга и типов
-    self.lsp_config = {
-            server = "ty",
-            cmd = { "ty", "server" },  -- правильная команда для LSP сервера
-        }
-    
-    -- Ruff для форматирования на сохранение (используем напрямую, быстро)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*.py",
-        callback = function()
-            local file_path = vim.fn.expand("%:p")
-            -- Форматируем через ruff (быстро и асинхронно)
-            vim.fn.jobstart({ "uvx", "ruff", "format", file_path }, {
-                on_exit = function()
-                    -- Перезагружаем файл после форматирования
-                    vim.cmd("edit!")
-                end,
-            })
-        end,
-    })
-    
-    -- Ruff для линтинга и автоисправления (опционально)
-    vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = "*.py",
-        callback = function()
-            local file_path = vim.fn.expand("%:p")
-            -- Запускаем ruff check с автоисправлением
-            vim.fn.jobstart({ "uvx", "ruff", "check", "--fix", file_path }, {
-                on_exit = function()
-                    -- Обновляем буфер после исправлений
-                    vim.cmd("checktime")
-                end,
-            })
-        end,
-    })
-    
+function PythonLanguage.new(id)
+    id = id or "ty"
+    local self = LanguageBase.new(id)
+    setmetatable(self, PythonLanguage)
     return self
 end
 
----@return string
-function PythonLanguage:create_start_template_project()
-    local template = [[#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+---@return table
+function PythonLanguage:get_formatter()
+    return {
+        command = "ruff",
+        args = { "format", "-" },
+        stdin = true,
+    }
+end
 
-def main():
-    print("Hello from ]] .. self.name .. [[")
+function PythonLanguage:on_file_saved(extension)
+    if extension ~= "py" then
+        return
+    end
 
-if __name__ == "__main__":
-    main()
-]]
-    return template
+    local bufnr = vim.api.nvim_get_current_buf()
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+
+    local formatter = self:get_formatter()
+    local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    local content = table.concat(lines, "\n")
+
+    local cmd = table.concat({ formatter.command, unpack(formatter.args) }, " ")
+    local result = vim.fn.system(cmd, content)
+
+    if vim.v.shell_error == 0 then
+        local formatted_lines = vim.split(result, "\n")
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted_lines)
+        vim.api.nvim_win_set_cursor(0, cursor_pos)
+    end
+end
+---@return table
+function PythonLanguage:get_lsp()
+    return {
+        cmd = { "ty", "server" },
+        filetypes = { "python" },
+        root_dir = function(fname)
+            return vim.fs.root(fname, { "pyproject.toml", "setup.py", "requirements.txt", ".git" })
+        end,
+    }
 end
 
 return PythonLanguage

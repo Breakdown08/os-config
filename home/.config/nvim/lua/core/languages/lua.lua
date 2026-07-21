@@ -1,46 +1,61 @@
 local LanguageBase = require("core.languages.class_language_base")
-
 ---@class LuaLanguage : LanguageBase
----@field name string
----@field autoformat_config table
----@field lsp_config table
 local LuaLanguage = {}
 LuaLanguage.__index = LuaLanguage
 
----Наследование от LanguageBase
-setmetatable(LuaLanguage, { __index = LanguageBase })
+setmetatable(LuaLanguage, {
+    __index = LanguageBase,
+})
 
----@param name string?
+---@param id string
 ---@return LuaLanguage
-function LuaLanguage.new(name)
-    local self = setmetatable({}, LuaLanguage)
-    self.name = name or "lua_ls"
-    self.autoformat_config = {
-        formatter = "stylua",
-        config_file = ".styluaignore"
-    }
-    self.lsp_config = {
-        server = "lua_ls",
-        settings = {
-            Lua = {
-                runtime = { version = "LuaJIT" },
-                diagnostics = { enable = true },
-                workspace = { checkThirdParty = false }
-            }
-        }
-    }
+function LuaLanguage.new(id)
+    id = id or "lua_ls"
+    local self = LanguageBase.new(id)
+    setmetatable(self, LuaLanguage)
     return self
 end
 
----@return string
-function LuaLanguage:create_start_template_project()
-    local template = [[
--- Project entry point
-print("Hello from ]] .. self.name .. [[")
+---@return table
+function LuaLanguage:get_formatter()
+    return {
+        command = "stylua",
+        args = { "-", "--indent-type", "spaces", "--indent-width", "4" },
+        stdin = true,
+    }
+end
 
--- Add your code here
-]]
-    return template
+function LuaLanguage:on_file_saved(extension)
+    if extension ~= "lua" then
+        return
+    end
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local formatter = self:get_formatter()
+    local cmd = string.format("%s %s", formatter.command, table.concat(formatter.args or {}, " "))
+    vim.cmd("silent! %!" .. cmd)
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+end
+
+---@return table
+function LuaLanguage:get_lsp()
+    return {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        root_dir = function(fname)
+            return vim.fs.root(fname, { ".luarc.json", ".git" })
+        end,
+        settings = {
+            Lua = {
+                runtime = { version = "LuaJIT" },
+                diagnostics = { globals = { "vim" } },
+                workspace = {
+                    library = vim.api.nvim_get_runtime_file("", true),
+                    checkThirdParty = false,
+                },
+                telemetry = { enable = false },
+            },
+        },
+    }
 end
 
 return LuaLanguage

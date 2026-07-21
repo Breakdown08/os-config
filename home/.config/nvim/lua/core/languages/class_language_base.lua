@@ -1,33 +1,33 @@
 ---@class LanguageBase
----@field name string
----@field autoformat_config table
----@field lsp_config table
+---@field id string
 local LanguageBase = {}
 LanguageBase.__index = LanguageBase
 
----@param name string?
+---@param id string?
 ---@return LanguageBase
-function LanguageBase.new(name)
-    local self = setmetatable({}, LanguageBase)
-    self.name = name or "base_language"
-    self.autoformat_config = {}
-    self.lsp_config = {}
+function LanguageBase.new(id)
+    local self = setmetatable({ id = id }, LanguageBase)
+    events.get(Event.FILE_SAVED):connect(function(...)
+        self:on_file_saved(...)
+    end)
     return self
 end
 
+---@abstract
 ---@return table
-function LanguageBase:get_autoformat_config()
-    return self.autoformat_config
+function LanguageBase:get_formatter()
+    error("Abstract method get_formatter() must be implemented")
 end
 
+---@abstract
+---@param extention string
 ---@return table
-function LanguageBase:get_lsp_config()
-    return self.lsp_config
-end
+function LanguageBase:on_file_saved(extention) end
 
----@return string
-function LanguageBase:create_start_template_project()
-    return ""
+---@abstract
+---@return table
+function LanguageBase:get_lsp()
+    error("Abstract method get_lsp() must be implemented")
 end
 
 return LanguageBase
