@@ -112,6 +112,7 @@
     telegram-desktop
     obsidian
     godot
+    stow
   ];
 
   # programs.mtr.enable = true;
