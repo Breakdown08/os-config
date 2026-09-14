@@ -69,7 +69,7 @@
   users.users."breakdown" = {
     isNormalUser = true;
     description = "breakdown";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -95,8 +95,12 @@
     mode = "0755";
   };
 
+  virtualisation.docker.enable = true;
+
 
   environment.systemPackages = with pkgs; [
+    xclip
+    stylua
     wget
     neovim
     git
@@ -113,6 +117,15 @@
     obsidian
     godot
     stow
+    clang
+    uv
+    python3
+    ruff
+    ty
+    k3d
+    kubectl
+    tree
+    gettext
   ];
 
   # programs.mtr.enable = true;
