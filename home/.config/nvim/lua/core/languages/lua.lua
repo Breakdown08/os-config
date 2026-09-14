@@ -41,9 +41,8 @@ function LuaLanguage:get_lsp()
     return {
         cmd = { "lua-language-server" },
         filetypes = { "lua" },
-        root_dir = function(fname)
-            return vim.fs.root(fname, { ".luarc.json", ".git" })
-        end,
+        root_markers = { ".luarc.json", ".git" },
+        single_file_support = true,
         settings = {
             Lua = {
                 runtime = { version = "LuaJIT" },

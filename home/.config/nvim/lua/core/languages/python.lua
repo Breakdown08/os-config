@@ -47,14 +47,14 @@ function PythonLanguage:on_file_saved(extension)
         vim.api.nvim_win_set_cursor(0, cursor_pos)
     end
 end
+
 ---@return table
 function PythonLanguage:get_lsp()
     return {
         cmd = { "ty", "server" },
         filetypes = { "python" },
-        root_dir = function(fname)
-            return vim.fs.root(fname, { "pyproject.toml", "setup.py", "requirements.txt", ".git" })
-        end,
+        root_markers = { "pyproject.toml", "setup.py", "requirements.txt", ".git" },
+        single_file_support = true,
     }
 end
 
