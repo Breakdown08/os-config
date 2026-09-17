@@ -2,6 +2,13 @@
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.android_sdk.accept_license = true;
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
@@ -35,7 +42,17 @@
 
   services.netbird.enable = true;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      default-address-pools = [
+        {
+          base = "10.201.0.0/16";
+          size = 24;
+        }
+      ];
+    };
+  };
 
   # Udev правила для клавиатуры
   services.udev.extraRules = ''
