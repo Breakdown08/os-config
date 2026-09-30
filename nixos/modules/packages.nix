@@ -34,6 +34,7 @@
     nix-index
     kitty
     tigervnc
+    transmission_4-gtk
   ] ++ [
     # Godot 4.5.1 из зафиксированного коммита
     pkgs-godot.godot_4_5
