@@ -15,6 +15,7 @@ in
     ./modules/users.nix
     ./modules/programs.nix
     ./modules/packages.nix
+    ./modules/ai-agents.nix
   ];
 
   # Передаём pkgs-godot в другие модули через _module.args
