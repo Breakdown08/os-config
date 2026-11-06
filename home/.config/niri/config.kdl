@@ -1,4 +1,4 @@
-// Mod+Shift+/ shows all keys
+// Mod+/ shows all keys
 input {
     keyboard {
         xkb {
@@ -36,7 +36,7 @@ spawn-at-startup "waybar"
 spawn-at-startup "mako"
 
 binds {
-    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Slash { show-hotkey-overlay; }
 
     Mod+Return { spawn "kitty"; }
     Mod+D { spawn "fuzzel"; }

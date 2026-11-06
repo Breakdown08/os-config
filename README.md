@@ -56,7 +56,7 @@ Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the 
 
 | Keys | Action |
 |---|---|
-| `Mod+Shift+/` | all keys |
+| `Mod+/` | all keys |
 | `Mod+Return` | terminal |
 | `Mod+D` | app launcher |
 | `Mod+H/J/K/L` | move focus |
