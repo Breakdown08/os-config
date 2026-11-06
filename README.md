@@ -8,12 +8,44 @@
 
 ## Команды
 
+### Применить конфиг
+
 ```bash
-sudo nixos-rebuild switch             # применить конфиг
-sudo nixos-rebuild test               # попробовать, после перезагрузки откатится
-sudo nixos-rebuild switch --rollback  # вернуть прошлую версию
-nix flake update --flake ~/os-config/nixos  # обновить пакеты, затем switch
-stow -d ~/os-config -t ~ home         # разложить настройки из home/
+sudo nixos-rebuild switch
+```
+
+### Попробовать без закрепления
+
+После перезагрузки система вернётся к прошлой версии.
+
+```bash
+sudo nixos-rebuild test
+```
+
+### Вернуть прошлую версию
+
+```bash
+sudo nixos-rebuild switch --rollback
+```
+
+### Обновить пакеты
+
+Затем примени конфиг.
+
+```bash
+nix flake update --flake ~/os-config/nixos
+```
+
+### Разложить настройки из home/
+
+```bash
+stow -d ~/os-config -t ~ home
+```
+
+### Проверить конфиг niri
+
+```bash
+niri validate
 ```
 
 Новый файл в `nixos/` сначала `git add`: flake видит только файлы, известные git.
@@ -38,25 +70,62 @@ stow -d ~/os-config -t ~ home         # разложить настройки и
 | `Mod+Alt+L` | блокировка |
 | `Mod+Shift+E` | выход из сессии |
 
-Правки `home/.config/niri/config.kdl` применяются сразу, проверка: `niri validate`.
+Правки `home/.config/niri/config.kdl` применяются сразу.
 
 ## Новая машина
 
+### 1. Склонировать репозиторий
+
 ```bash
 git clone git@github.com:Breakdown08/os-config.git ~/os-config
+```
+
+### 2. Сверить железо
+
+Сравни вывод с `nixos/modules/hardware-configuration.nix`.
+
+```bash
+nixos-generate-config --show-hardware-config
+```
+
+### 3. Указать flake
+
+```bash
 sudo ln -sf ~/os-config/nixos/flake.nix /etc/nixos/flake.nix
+```
+
+### 4. Собрать систему
+
+```bash
 sudo nixos-rebuild switch
+```
+
+### 5. Разложить настройки
+
+```bash
 stow -d ~/os-config -t ~ home
 ```
 
-Перед первой сборкой сверь `nixos/modules/hardware-configuration.nix` с новым железом: `nixos-generate-config --show-hardware-config`.
-
 ## Секреты
 
-Файл `secrets/<проект>.env` по образцу `secrets/example.env`, в `.envrc` проекта:
+В `.nix`-файлы секреты не класть: всё оттуда попадает в `/nix/store`, открытый на чтение всем пользователям. Переменные будут доступны только внутри проекта.
+
+### 1. Создать файл
 
 ```bash
-dotenv ~/os-config/secrets/<проект>.env
+cp ~/os-config/secrets/example.env ~/os-config/secrets/<проект>.env
 ```
 
-Затем `direnv allow`: переменные есть только внутри этого проекта. В `.nix`-файлы секреты не класть, всё оттуда попадает в `/nix/store`, открытый на чтение всем пользователям.
+### 2. Подключить к проекту
+
+Выполни в папке проекта.
+
+```bash
+echo 'dotenv ~/os-config/secrets/<проект>.env' >> .envrc
+```
+
+### 3. Разрешить
+
+```bash
+direnv allow
+```
