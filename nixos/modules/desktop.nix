@@ -6,14 +6,14 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.cinnamon.enable = true;
 
-  # niri — вторая сессия, выбирается на экране входа; настройки в home/.config/niri
+  # niri is a second session, picked on the login screen; settings in home/.config/niri
   programs.niri.enable = true;
   services.displayManager.defaultSession = "cinnamon";
   security.pam.services.swaylock = { };
-  # Браузеры и Electron — родным Wayland под niri, под X11 переменная не действует
+  # Browsers and Electron run native Wayland under niri; the variable does nothing under X11
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.systemPackages = with pkgs; [
-    xwayland-satellite # X11-программы под niri, niri запускает его сам
+    xwayland-satellite # X11 apps under niri, niri starts it itself
     wl-clipboard
     fuzzel
     waybar

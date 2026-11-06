@@ -1,4 +1,4 @@
-// Mod+Shift+/ показывает все клавиши
+// Mod+Shift+/ shows all keys
 input {
     keyboard {
         xkb {

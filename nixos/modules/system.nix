@@ -54,7 +54,7 @@
     };
   };
 
-  # Udev правила для клавиатуры
+  # Udev rules for the keyboard
   services.udev.extraRules = ''
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="4c4b", ATTRS{idProduct}=="4643", MODE="0666", TAG+="uaccess"
   '';

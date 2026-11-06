@@ -1,7 +1,7 @@
 { config, pkgs, inputs, ... }:
 
 let
-  # Отдельный набор пакетов из зафиксированного nixpkgs
+  # Separate package set from the pinned nixpkgs
   pkgs-godot = import inputs.nixpkgs-godot {
     system = "x86_64-linux";
     config.allowUnfree = true;
@@ -18,7 +18,7 @@ in
     ./modules/ai-agents.nix
   ];
 
-  # Передаём pkgs-godot в другие модули через _module.args
+  # Pass pkgs-godot to other modules through _module.args
   _module.args = { inherit pkgs-godot; };
 
   system.stateVersion = "26.05";

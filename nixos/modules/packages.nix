@@ -1,12 +1,12 @@
 { config, pkgs, pkgs-godot, ... }:
 
 let
-  # Шаблоны экспорта Godot — из того же пина, что и движок: версии должны совпадать
+  # Godot export templates, from the same pin as the engine: the versions must match
   godot-templates = pkgs-godot.godot_4_5.export-templates-bin;
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
 in
 {
-  # Godot ищет шаблоны только в ~/.local/share/godot/export_templates/<версия>
+  # Godot looks for templates only in ~/.local/share/godot/export_templates/<version>
   systemd.tmpfiles.rules = [
     "d ${config.users.users.breakdown.home}/.local/share/godot 0755 breakdown users -"
     "d ${config.users.users.breakdown.home}/.local/share/godot/export_templates 0755 breakdown users -"
@@ -48,7 +48,7 @@ in
     tigervnc
     transmission_4-gtk
   ] ++ [
-    # Godot 4.5.1 из зафиксированного коммита
+    # Godot 4.5.1 from the pinned commit
     pkgs-godot.godot_4_5
   ];
 }

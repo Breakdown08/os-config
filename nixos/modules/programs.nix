@@ -9,6 +9,6 @@
     enable = true;
   };
 
-  # Секреты проектов: secrets/ в корне репозитория, см. README
+  # Project secrets: secrets/ at the repository root, see the README
   programs.direnv.enable = true;
 }

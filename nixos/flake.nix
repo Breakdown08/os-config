@@ -11,12 +11,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Коммит с Godot 4.5.1 (16 сентября 2026)
+    # Commit with Godot 4.5.1 (September 16, 2026)
     nixpkgs-godot = {
       url = "github:NixOS/nixpkgs/be3dab5b1a3c41ed2db86093b9f4e048305630b7";
     };
 
-    # AI-агенты: Claude Code + Codex CLI
+    # AI agents: Claude Code + Codex CLI
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
