@@ -1,130 +1,130 @@
 # os-config
 
-Конфигурация моей NixOS и домашние настройки: один репозиторий на всю машину.
+My NixOS configuration and home settings: one repository for the whole machine.
 
-- `nixos/` — система: flake, модули, `flake.lock`.
-- `home/` — stow-пакет, содержимое ложится в `~`: neovim, niri, waybar.
-- `secrets/` — секреты проектов, в git только образец.
+- `nixos/` — the system: flake, modules, `flake.lock`.
+- `home/` — a stow package installed into `~`: neovim, niri, waybar.
+- `secrets/` — per-project secrets; only the template is in git.
 
-## Команды
+## Commands
 
-### Применить конфиг
+### Apply the configuration
 
 ```bash
 sudo nixos-rebuild switch
 ```
 
-### Попробовать без закрепления
+### Try it without keeping it
 
-После перезагрузки система вернётся к прошлой версии.
+The system returns to the previous version after a reboot.
 
 ```bash
 sudo nixos-rebuild test
 ```
 
-### Вернуть прошлую версию
+### Roll back to the previous version
 
 ```bash
 sudo nixos-rebuild switch --rollback
 ```
 
-### Обновить пакеты
+### Update packages
 
-Затем примени конфиг.
+Then apply the configuration.
 
 ```bash
 nix flake update --flake ~/os-config/nixos
 ```
 
-### Разложить настройки из home/
+### Install the settings from home/
 
 ```bash
 stow -d ~/os-config -t ~ home
 ```
 
-### Проверить конфиг niri
+### Check the niri configuration
 
 ```bash
 niri validate
 ```
 
-Новый файл в `nixos/` сначала `git add`: flake видит только файлы, известные git.
+Run `git add` on any new file in `nixos/` first: a flake only sees files known to git.
 
 ## niri
 
-Рядом с Cinnamon: сессия выбирается на экране входа, по умолчанию остаётся Cinnamon.
+Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the default.
 
-| Клавиши | Действие |
+| Keys | Action |
 |---|---|
-| `Mod+Shift+/` | все клавиши |
-| `Mod+Return` | терминал |
-| `Mod+D` | запуск программ |
-| `Mod+H/J/K/L` | фокус |
-| `Mod+Shift+H/J/K/L` | перенос окна |
-| `Mod+1..5` | рабочие столы |
-| `Mod+O` | обзор |
-| `Mod+R` / `Mod+F` | ширина колонки / на весь экран |
-| `Mod+Q` | закрыть окно |
-| `Ctrl+Space` | раскладка |
-| `Print` | скриншот области |
-| `Mod+Alt+L` | блокировка |
-| `Mod+Shift+E` | выход из сессии |
+| `Mod+Shift+/` | all keys |
+| `Mod+Return` | terminal |
+| `Mod+D` | app launcher |
+| `Mod+H/J/K/L` | move focus |
+| `Mod+Shift+H/J/K/L` | move window |
+| `Mod+1..5` | workspaces |
+| `Mod+O` | overview |
+| `Mod+R` / `Mod+F` | column width / maximize |
+| `Mod+Q` | close window |
+| `Ctrl+Space` | keyboard layout |
+| `Print` | screenshot of an area |
+| `Mod+Alt+L` | lock |
+| `Mod+Shift+E` | quit the session |
 
-Правки `home/.config/niri/config.kdl` применяются сразу.
+Edits to `home/.config/niri/config.kdl` apply immediately.
 
-## Новая машина
+## New machine
 
-### 1. Склонировать репозиторий
+### 1. Clone the repository
 
 ```bash
 git clone git@github.com:Breakdown08/os-config.git ~/os-config
 ```
 
-### 2. Сверить железо
+### 2. Compare the hardware
 
-Сравни вывод с `nixos/modules/hardware-configuration.nix`.
+Compare the output with `nixos/modules/hardware-configuration.nix`.
 
 ```bash
 nixos-generate-config --show-hardware-config
 ```
 
-### 3. Указать flake
+### 3. Point the system at the flake
 
 ```bash
 sudo ln -sf ~/os-config/nixos/flake.nix /etc/nixos/flake.nix
 ```
 
-### 4. Собрать систему
+### 4. Build the system
 
 ```bash
 sudo nixos-rebuild switch
 ```
 
-### 5. Разложить настройки
+### 5. Install the settings
 
 ```bash
 stow -d ~/os-config -t ~ home
 ```
 
-## Секреты
+## Secrets
 
-В `.nix`-файлы секреты не класть: всё оттуда попадает в `/nix/store`, открытый на чтение всем пользователям. Переменные будут доступны только внутри проекта.
+Never put secrets in `.nix` files: everything there lands in `/nix/store`, readable by all users. The variables are available only inside the project.
 
-### 1. Создать файл
-
-```bash
-cp ~/os-config/secrets/example.env ~/os-config/secrets/<проект>.env
-```
-
-### 2. Подключить к проекту
-
-Выполни в папке проекта.
+### 1. Create the file
 
 ```bash
-echo 'dotenv ~/os-config/secrets/<проект>.env' >> .envrc
+cp ~/os-config/secrets/example.env ~/os-config/secrets/<project>.env
 ```
 
-### 3. Разрешить
+### 2. Connect it to the project
+
+Run this in the project folder.
+
+```bash
+echo 'dotenv ~/os-config/secrets/<project>.env' >> .envrc
+```
+
+### 3. Allow it
 
 ```bash
 direnv allow
