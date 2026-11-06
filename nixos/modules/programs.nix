@@ -9,9 +9,8 @@
     enable = true;
   };
 
-  environment.variables = {
-    NB_MANAGEMENT_URL = "https://vpn.example.com:443";
-  };
+  # Секреты проектов: secrets/ в корне репозитория, см. README
+  programs.direnv.enable = true;
 
   environment.etc."profile.d/load-user-profile.sh" = {
     text = ''
