@@ -11,15 +11,4 @@
 
   # Секреты проектов: secrets/ в корне репозитория, см. README
   programs.direnv.enable = true;
-
-  environment.etc."profile.d/load-user-profile.sh" = {
-    text = ''
-      if [ -f "$HOME/.profile" ]; then
-        set -a
-        source "$HOME/.profile"
-        set +a
-      fi
-    '';
-    mode = "0755";
-  };
 }
