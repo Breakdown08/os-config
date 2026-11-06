@@ -1,0 +1,28 @@
+* {
+  font-family: "Hurmit Nerd Font", monospace;
+  font-size: 13px;
+}
+
+window#waybar {
+  background: #1e1e2e;
+  color: #cdd6f4;
+}
+
+#workspaces button {
+  padding: 0 6px;
+  color: #6c7086;
+}
+
+#workspaces button.active {
+  color: #cdd6f4;
+}
+
+#window,
+#clock,
+#language,
+#wireplumber,
+#battery,
+#network,
+#tray {
+  padding: 0 8px;
+}

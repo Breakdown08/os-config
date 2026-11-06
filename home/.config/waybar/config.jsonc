@@ -1,0 +1,13 @@
+{
+  "layer": "top",
+  "height": 28,
+  "modules-left": ["niri/workspaces", "niri/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["niri/language", "wireplumber", "battery", "network", "tray"],
+  "clock": { "format": "{:%a %d %b  %H:%M}" },
+  "niri/language": { "format": "{short}" },
+  "network": { "format-wifi": "{essid}", "format-ethernet": "сеть", "format-disconnected": "нет сети" },
+  "wireplumber": { "format": "звук {volume}%", "format-muted": "звук выкл" },
+  "battery": { "format": "бат {capacity}%" },
+  "tray": { "spacing": 8 }
+}
