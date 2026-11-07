@@ -1,30 +1,21 @@
--- 🔢 Включаем номера строк
-vim.opt.number = true -- Показывать абсолютные номера строк
-vim.opt.relativenumber = true -- Относительные номера (полезно для перемещения по коду)
+vim.opt.number = true
+vim.opt.relativenumber = true
 
--- 📝 Настройки табов и отступов
-vim.opt.tabstop = 4 -- Кол-во пробелов, соответствующих символу табуляции
-vim.opt.shiftwidth = 4 -- Кол-во пробелов при автоотступе
-vim.opt.expandtab = true -- Заменять табуляцию пробелами
-vim.opt.smartindent = true -- Автоматически добавлять отступы для нового кода
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
 
--- 🎨 Цвета и интерфейс
-vim.opt.termguicolors = true -- Включить поддержку 24-битных цветов в терминале
-vim.opt.cursorline = true -- Подсвечивать текущую строку
-vim.opt.wrap = false -- Не переносить строки автоматически
+vim.opt.termguicolors = true
+vim.opt.cursorline = true
+vim.opt.wrap = false
 
--- 🔍 Поиск
-vim.opt.ignorecase = true -- Игнорировать регистр при поиске...
-vim.opt.smartcase = true -- ...но учитывать регистр, если в запросе есть заглавные буквы
-vim.opt.hlsearch = true -- Подсвечивать найденные результаты
-vim.opt.incsearch = true -- Показывать результат поиска по мере ввода
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
--- 💾 Файлы и история
-vim.opt.undofile = true -- Включить постоянный undo (сохраняется между сессиями)
-vim.opt.swapfile = false -- Не использовать .swp файлы
-vim.opt.backup = false -- Не создавать резервные копии
-vim.opt.clipboard = "unnamedplus" -- Буфер обмена
+vim.opt.undofile = true
+vim.opt.swapfile = false
+vim.opt.clipboard = "unnamedplus"
 
--- ⏱ Производительность
-vim.opt.updatetime = 300 -- Время (мс) перед обновлением событий, например LSP
-vim.opt.timeoutlen = 500 -- Время ожидания (мс) для комбинаций клавиш
+vim.opt.updatetime = 300
+vim.opt.timeoutlen = 500

@@ -1,19 +1,25 @@
 -- Before plugins load, so their <Leader> mappings use it
 vim.g.mapleader = " "
 
-project_root = vim.fn.getcwd()
-config_root = vim.fn.stdpath("config")
-
--- Раздел объявлений
 require("settings")
-require("core.print") -- обертка для вывода в консоль
-require("core.event_bus") -- шина событий
-require("core.enum_language") -- поддерживаемые языки разработки
-require("core.enum_connection_status") -- абстрактный статус подключения, например к LSP/DAP
-require("core.utils") -- вспомогательные утилиты
-require("core.lazy") -- менеджер плагинов
-require("keymaps") -- раскладка горячих клавиш
-require("controllers.explorer") -- контроллер по работе с проводником
+require("keymaps")
+require("commands")
+require("languages")
 
--- Раздел вызовов
-events.get(Event.PROJECT_TYPE_REQUESTED):emit()
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "--branch=stable",
+        "https://github.com/folke/lazy.nvim.git",
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+    spec = { import = "plugins" },
+    rocks = { enabled = false },
+})
