@@ -19,6 +19,7 @@ in
     wget
     neovim
     tree-sitter
+    lua-language-server
     git
     vivaldi
     chromium

@@ -1,3 +1,6 @@
+-- Before plugins load, so their <Leader> mappings use it
+vim.g.mapleader = " "
+
 project_root = vim.fn.getcwd()
 config_root = vim.fn.stdpath("config")
 
