@@ -19,3 +19,10 @@ vim.opt.clipboard = "unnamedplus"
 
 vim.opt.updatetime = 300
 vim.opt.timeoutlen = 500
+
+-- Built-in autocompletion: LSP first, then words from open buffers
+vim.opt.autocomplete = true
+vim.opt.complete = "o,.,w,b"
+vim.opt.completeopt = "menuone,noselect,popup,fuzzy"
+vim.opt.pumborder = "rounded"
+vim.opt.winborder = "rounded"

@@ -4,6 +4,8 @@ vim.lsp.enable({ "lua_ls", "ty" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
+        -- Accepting an item applies its snippet, auto-imports and other edits
+        vim.lsp.completion.enable(true, args.data.client_id, args.buf)
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = args.buf, desc = "Go to definition" })
     end,
 })
