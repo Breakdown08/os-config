@@ -15,7 +15,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     desc = "Format Lua with stylua",
     callback = function(args)
         local input = table.concat(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false), "\n") .. "\n"
-        local result = vim.system({ "stylua", "--indent-type", "Spaces", "--indent-width", "4", "-" }, { stdin = input })
+        local result = vim.system(
+            { "stylua", "--indent-type", "Spaces", "--indent-width", "4", "-" },
+            { stdin = input }
+        )
             :wait()
         if result.code ~= 0 then
             vim.notify("stylua: " .. result.stderr, vim.log.levels.WARN)
