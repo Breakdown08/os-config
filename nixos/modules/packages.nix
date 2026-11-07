@@ -17,7 +17,6 @@ in
     xclip
     stylua
     wget
-    neovim
     tree-sitter
     lua-language-server
     fzf
