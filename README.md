@@ -68,7 +68,7 @@ Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the 
 | `Ctrl+Space` | keyboard layout |
 | `Print` | screenshot of an area |
 | `Mod+Alt+L` | lock |
-| `Mod+Shift+E` | quit the session |
+| `Mod+Shift+E` | power menu: power off, reboot, log out |
 
 Edits to `home/.config/niri/config.kdl` apply immediately.
 
