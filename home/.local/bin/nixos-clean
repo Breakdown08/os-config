@@ -1,0 +1,6 @@
+#!/bin/sh
+# Keep only the running NixOS generation: delete the rest and drop them from the boot menu.
+set -e
+sudo nix-collect-garbage -d
+nix-collect-garbage -d
+sudo /run/current-system/bin/switch-to-configuration boot

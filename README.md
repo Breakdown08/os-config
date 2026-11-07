@@ -36,6 +36,14 @@ Then apply the configuration.
 nix flake update --flake ~/os-config/nixos
 ```
 
+### Delete old generations
+
+Keeps only the running system and removes the others from the boot menu. Rolling back is no longer possible.
+
+```bash
+nixos-clean
+```
+
 ### Install the settings from home/
 
 ```bash
