@@ -75,6 +75,10 @@ Notifications pop up one at a time for five seconds. The bell on waybar counts t
 
 Edits to `home/.config/niri/config.kdl` apply immediately.
 
+## kitty
+
+`Ctrl+Shift+Enter` opens a window next to the current one, in the same directory.
+
 ## Neovim
 
 Plugins are managed by the built-in `vim.pack`: the first start installs them at the revisions in `nvim-pack-lock.json`, `:lua vim.pack.update()` updates them.
