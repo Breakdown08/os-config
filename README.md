@@ -3,7 +3,7 @@
 My NixOS configuration and home settings: one repository for the whole machine.
 
 - `nixos/` — the system: flake, modules, `flake.lock`.
-- `home/` — a stow package installed into `~`: kitty, neovim, niri, waybar.
+- `home/` — a stow package installed into `~`: kitty, mako, neovim, niri, waybar.
 - `secrets/` — per-project secrets; only the template is in git.
 
 ## Commands
@@ -66,9 +66,12 @@ Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the 
 | `Mod+R` / `Mod+F` | column width / maximize |
 | `Mod+Q` | close window |
 | `Ctrl+Space` | keyboard layout |
+| `Mod+N` / `Mod+Shift+N` | do not disturb / dismiss notifications |
 | `Print` | screenshot of an area |
 | `Mod+Alt+L` | lock |
 | `Mod+Shift+E` | power menu: power off, reboot, log out |
+
+Notifications pop up one at a time for five seconds. The bell on waybar counts them: click toggles do not disturb, right click dismisses all.
 
 Edits to `home/.config/niri/config.kdl` apply immediately.
 

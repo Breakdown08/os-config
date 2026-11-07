@@ -1,0 +1,25 @@
+# One small popup at a time, gone after five seconds.
+# The bell on waybar counts the rest; Mod+N silences them.
+font=Hurmit Nerd Font 11
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#45475a
+border-size=1
+border-radius=8
+padding=8,12
+width=360
+max-visible=1
+default-timeout=5000
+
+[urgency=critical]
+border-color=#f38ba8
+default-timeout=0
+
+[hidden]
+invisible=1
+
+# Silenced notifications wait in the bell until dismissed.
+[mode=do-not-disturb]
+invisible=1
+default-timeout=0
+ignore-timeout=1

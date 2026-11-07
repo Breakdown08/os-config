@@ -83,6 +83,9 @@ binds {
     Mod+BracketLeft { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
 
+    Mod+N hotkey-overlay-title="Do Not Disturb" { spawn "sh" "-c" "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar"; }
+    Mod+Shift+N hotkey-overlay-title="Dismiss Notifications" { spawn "sh" "-c" "makoctl dismiss --all && pkill -RTMIN+8 waybar"; }
+
     Print { screenshot; }
     Ctrl+Print hotkey-overlay-title="Screenshot Screen" { screenshot-screen; }
     Alt+Print hotkey-overlay-title="Screenshot Window" { screenshot-window; }

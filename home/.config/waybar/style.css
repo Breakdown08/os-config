@@ -23,6 +23,15 @@ window#waybar {
 #wireplumber,
 #battery,
 #network,
+#custom-notifications,
 #tray {
   padding: 0 8px;
+}
+
+#custom-notifications.unread {
+  color: #f9e2af;
+}
+
+#custom-notifications.dnd {
+  color: #6c7086;
 }
