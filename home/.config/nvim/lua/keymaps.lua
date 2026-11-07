@@ -5,21 +5,18 @@ end
 local project_root = vim.fn.getcwd()
 
 map("<Tab>", function()
-    -- Keep the tree when it is the only window left
-    if #vim.api.nvim_list_wins() > 1 or vim.bo.filetype ~= "nerdtree" then
-        vim.cmd("NERDTreeToggle")
+    if vim.bo.filetype == "oil" then
+        require("oil").close()
+    else
+        require("oil").open()
     end
 end, "Toggle the file explorer")
 map("<Leader>[", function()
-    vim.cmd("NERDTree " .. vim.fn.stdpath("config"))
+    require("oil").open(vim.fn.stdpath("config"))
 end, "Open the Neovim config")
 map("<Leader>]", function()
-    vim.cmd("NERDTree " .. project_root)
+    require("oil").open(project_root)
 end, "Open the project root")
-
-map("<Leader>ka", "<Cmd>map<CR>", "List all mappings")
-map("<Leader>kn", "<Cmd>nmap<CR>", "List normal mode mappings")
-map("<Leader>kv", "<Cmd>vmap<CR>", "List visual mode mappings")
 
 map("<C-h>", "<C-w>h", "Go to the window on the left")
 map("<C-j>", "<C-w>j", "Go to the window below")

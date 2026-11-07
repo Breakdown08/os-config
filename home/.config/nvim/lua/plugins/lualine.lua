@@ -10,14 +10,7 @@ return {
         sections = {
             lualine_a = { "mode" },
             lualine_b = { "diff", "diagnostics" },
-            lualine_c = {
-                {
-                    "filename",
-                    cond = function()
-                        return vim.bo.filetype ~= "nerdtree"
-                    end,
-                },
-            },
+            lualine_c = { "filename" },
             lualine_x = { "location" },
             lualine_y = { "filetype" },
             lualine_z = { "encoding", "fileformat" },

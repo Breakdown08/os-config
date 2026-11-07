@@ -72,6 +72,28 @@ Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the 
 
 Edits to `home/.config/niri/config.kdl` apply immediately.
 
+## Neovim
+
+Leader is `Space`. LSP uses the Nvim defaults: `grn` rename, `grr` references, `gri` implementation, `gra` code action, `K` hover.
+
+| Keys | Action |
+|---|---|
+| `Space f` / `Space g` | find a file / search the project |
+| `Space Space` | switch buffer |
+| `Space d` | diagnostics in the file |
+| `Space k` / `Space h` | search mappings / help |
+| `Space r` | resume the last search |
+| `Tab` | file explorer: edit the directory, save with `:w` |
+| `Space [` / `Space ]` | explorer in the Neovim config / project root |
+| `Ctrl+H/J/K/L` | move between windows |
+| `Ctrl+Q` | close window |
+| `gd` | go to definition |
+| `van` / `in` | grow / shrink the selection by syntax node |
+| `af` `if` `ac` `ic` `aa` `ia` | function, class, argument text objects |
+| `]m` `[m` / `]]` `[[` | next / previous function / class |
+| `Space a` / `Space A` | swap the argument with the next / previous one |
+| `Space b` | build the C file |
+
 ## New machine
 
 ### 1. Clone the repository

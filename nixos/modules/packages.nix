@@ -20,6 +20,8 @@ in
     neovim
     tree-sitter
     lua-language-server
+    fzf
+    ripgrep
     git
     vivaldi
     chromium
