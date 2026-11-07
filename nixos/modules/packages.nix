@@ -18,6 +18,7 @@ in
     stylua
     wget
     neovim
+    tree-sitter
     git
     vivaldi
     chromium

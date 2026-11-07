@@ -54,82 +54,84 @@ local function apply_syntax_colors()
 	vim.api.nvim_set_hl(0, "@comment", { fg = "#b8a99a", italic = false })
 end
 
+local parsers = {
+	"bash", "c", "csv", "dockerfile", "gdscript", "git_config", "gitignore", "godot_resource", "json", "kdl",
+	"lua", "markdown", "markdown_inline", "nix", "python", "query", "requirements", "ssh_config", "toml",
+	"vim", "vimdoc", "xml", "yaml",
+}
+
+-- Treesitter indentation is experimental and breaks GDScript.
+local no_indent = { gdscript = true }
+
+local function map_textobjects()
+	local select = require("nvim-treesitter-textobjects.select")
+	local move = require("nvim-treesitter-textobjects.move")
+	local swap = require("nvim-treesitter-textobjects.swap")
+
+	for keys, capture in pairs({
+		aa = "@parameter.outer",
+		ia = "@parameter.inner",
+		af = "@function.outer",
+		["if"] = "@function.inner",
+		ac = "@class.outer",
+		ic = "@class.inner",
+	}) do
+		vim.keymap.set({ "x", "o" }, keys, function()
+			select.select_textobject(capture, "textobjects")
+		end)
+	end
+
+	for keys, motion in pairs({
+		["]m"] = { move.goto_next_start, "@function.outer" },
+		["]]"] = { move.goto_next_start, "@class.outer" },
+		["]M"] = { move.goto_next_end, "@function.outer" },
+		["]["] = { move.goto_next_end, "@class.outer" },
+		["[m"] = { move.goto_previous_start, "@function.outer" },
+		["[["] = { move.goto_previous_start, "@class.outer" },
+		["[M"] = { move.goto_previous_end, "@function.outer" },
+		["[]"] = { move.goto_previous_end, "@class.outer" },
+	}) do
+		vim.keymap.set({ "n", "x", "o" }, keys, function()
+			motion[1](motion[2], "textobjects")
+		end)
+	end
+
+	vim.keymap.set("n", "<leader>a", function()
+		swap.swap_next("@parameter.inner")
+	end)
+	vim.keymap.set("n", "<leader>A", function()
+		swap.swap_previous("@parameter.inner")
+	end)
+end
+
 local function init()
-	require("nvim-treesitter.configs").setup({
-		-- Add languages to be installed here that you want installed for treesitter
-		ensure_installed = { "c", "lua", "query" },
-		-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-		auto_install = true,
-		-- Install languages synchronously (only applied to `ensure_installed`)
-		sync_install = false,
-		-- List of parsers to ignore installing
-		ignore_install = {},
-		-- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
-		modules = {},
-		highlight = { enable = true },
-		indent = { enable = true, disable = { "gdscript" } },
-		incremental_selection = {
-			enable = true,
-			keymaps = {
-				init_selection = "<c-space>",
-				node_incremental = "<c-space>",
-				scope_incremental = "<c-s>",
-				node_decremental = "<M-space>",
-			},
-		},
-		textobjects = {
-			select = {
-				enable = true,
-				lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-				keymaps = {
-					-- You can use the capture groups defined in textobjects.scm
-					["aa"] = "@parameter.outer",
-					["ia"] = "@parameter.inner",
-					["af"] = "@function.outer",
-					["if"] = "@function.inner",
-					["ac"] = "@class.outer",
-					["ic"] = "@class.inner",
-				},
-			},
-			move = {
-				enable = true,
-				set_jumps = true, -- whether to set jumps in the jumplist
-				goto_next_start = {
-					["]m"] = "@function.outer",
-					["]]"] = "@class.outer",
-				},
-				goto_next_end = {
-					["]M"] = "@function.outer",
-					["]["] = "@class.outer",
-				},
-				goto_previous_start = {
-					["[m"] = "@function.outer",
-					["[["] = "@class.outer",
-				},
-				goto_previous_end = {
-					["[M"] = "@function.outer",
-					["[]"] = "@class.outer",
-				},
-			},
-			swap = {
-				enable = true,
-				swap_next = {
-					["<leader>a"] = "@parameter.inner",
-				},
-				swap_previous = {
-					["<leader>A"] = "@parameter.inner",
-				},
-			},
-		},
+	require("nvim-treesitter").install(parsers)
+
+	vim.api.nvim_create_autocmd("FileType", {
+		callback = function(args)
+			if not pcall(vim.treesitter.start, args.buf) then
+				return
+			end
+			local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+			if not no_indent[lang] and vim.treesitter.query.get(lang, "indents") then
+				vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			end
+		end,
 	})
+
+	require("nvim-treesitter-textobjects").setup({
+		select = { lookahead = true },
+		move = { set_jumps = true },
+	})
+	map_textobjects()
 	apply_syntax_colors()
 end
 
 return {
 	"nvim-treesitter/nvim-treesitter",
-	branch = "master",
+	branch = "main",
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
+		{ "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
 	},
 	lazy = false,
 	build = ":TSUpdate",
