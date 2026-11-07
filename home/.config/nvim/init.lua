@@ -6,20 +6,9 @@ require("keymaps")
 require("commands")
 require("languages")
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.uv.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "--branch=stable",
-        "https://github.com/folke/lazy.nvim.git",
-        lazypath,
-    })
-end
-vim.opt.rtp:prepend(lazypath)
-
-require("lazy").setup({
-    spec = { import = "plugins" },
-    rocks = { enabled = false },
-})
+-- Treesitter goes first: its PackChanged hook has to exist before the first vim.pack.add
+require("plugins.treesitter")
+require("plugins.lualine")
+require("plugins.colorizer")
+require("plugins.oil")
+require("plugins.fzf")

@@ -74,6 +74,8 @@ Edits to `home/.config/niri/config.kdl` apply immediately.
 
 ## Neovim
 
+Plugins are managed by the built-in `vim.pack`: the first start installs them at the revisions in `nvim-pack-lock.json`, `:lua vim.pack.update()` updates them.
+
 Leader is `Space`. LSP uses the Nvim defaults: `grn` rename, `grr` references, `gri` implementation, `gra` code action, `K` hover.
 
 | Keys | Action |

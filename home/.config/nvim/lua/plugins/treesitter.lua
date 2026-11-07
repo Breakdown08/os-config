@@ -1,7 +1,7 @@
 local function apply_syntax_colors()
-    vim.api.nvim_set_hl(0, "@include", { fg = "#145c66", bold = true }) -- импорты (import, require)
+    vim.api.nvim_set_hl(0, "@include", { fg = "#145c66", bold = true }) -- imports (import, require)
 
-    local field_color = "#976e61" -- поля, свойства, переменные, параметры функций
+    local field_color = "#976e61" -- fields, properties, variables, parameters
     vim.api.nvim_set_hl(0, "@field", { fg = field_color })
     vim.api.nvim_set_hl(0, "@property", { fg = field_color })
     vim.api.nvim_set_hl(0, "@lsp.type.variable", { fg = field_color })
@@ -10,25 +10,25 @@ local function apply_syntax_colors()
     vim.api.nvim_set_hl(0, "@table", { fg = field_color })
     vim.api.nvim_set_hl(0, "@identifier", { fg = field_color })
 
-    local function_color = "#3e599a" -- ключевые слова объявления функций и методов
+    local function_color = "#3e599a" -- keywords that declare functions and methods
     vim.api.nvim_set_hl(0, "@keyword.function", { fg = function_color })
     vim.api.nvim_set_hl(0, "@keyword.method", { fg = function_color })
 
-    vim.api.nvim_set_hl(0, "@function.method", { fg = "#662a73" }) -- именования функций после ключевых слов
+    vim.api.nvim_set_hl(0, "@function.method", { fg = "#662a73" }) -- function names in declarations
 
-    local function_call_color = "#328c77" -- вызовы функций и методов
+    local function_call_color = "#328c77" -- function and method calls
     vim.api.nvim_set_hl(0, "@function.method.call", { fg = function_call_color })
     vim.api.nvim_set_hl(0, "@function.call", { fg = function_call_color })
     vim.api.nvim_set_hl(0, "@lsp.type.function", { fg = function_call_color })
     vim.api.nvim_set_hl(0, "@lsp.type.method", { fg = function_call_color })
 
-    local builtin_color = "#be2e57" -- -- зарезервированные слова
+    local builtin_color = "#be2e57" -- built-ins
     vim.api.nvim_set_hl(0, "@module.builtin", { fg = builtin_color })
     vim.api.nvim_set_hl(0, "@function.builtin", { fg = builtin_color })
     vim.api.nvim_set_hl(0, "@variable.builtin", { fg = builtin_color })
 
     vim.api.nvim_set_hl(0, "@string", { fg = "#c08537" })
-    vim.api.nvim_set_hl(0, "@string.escape", { fg = "#ac8b67" }) -- экранирование в строках
+    vim.api.nvim_set_hl(0, "@string.escape", { fg = "#ac8b67" }) -- escapes in strings
     vim.api.nvim_set_hl(0, "@number", { fg = "#d2e26a" })
     vim.api.nvim_set_hl(0, "@constructor", { fg = "#d2e26a" })
 
@@ -38,18 +38,18 @@ local function apply_syntax_colors()
 
     local keyword_color = "#ff8983"
     vim.api.nvim_set_hl(0, "@constant", { fg = keyword_color })
-    vim.api.nvim_set_hl(0, "@keyword", { fg = keyword_color, bold = true }) -- ключевые слова (if, return, func)
+    vim.api.nvim_set_hl(0, "@keyword", { fg = keyword_color, bold = true }) -- keywords (return, local, function)
 
     local action_color = "#00accd"
-    vim.api.nvim_set_hl(0, "@keyword.conditional", { fg = action_color, bold = true }) -- условия (if, else, switch)
-    vim.api.nvim_set_hl(0, "@keyword.repeat", { fg = action_color, bold = true }) -- циклы (for, while)
-    vim.api.nvim_set_hl(0, "@exception", { fg = action_color }) -- исключения (try, catch)
+    vim.api.nvim_set_hl(0, "@keyword.conditional", { fg = action_color, bold = true }) -- conditionals (if, else, switch)
+    vim.api.nvim_set_hl(0, "@keyword.repeat", { fg = action_color, bold = true }) -- loops (for, while)
+    vim.api.nvim_set_hl(0, "@exception", { fg = action_color }) -- exceptions (try, catch)
 
-    vim.api.nvim_set_hl(0, "@operator", { fg = "#9bb0a5" }) -- операторы (+, -, =, *)
+    vim.api.nvim_set_hl(0, "@operator", { fg = "#9bb0a5" }) -- operators (+, -, =, *)
 
     local symbol_color = "#ffea97"
-    vim.api.nvim_set_hl(0, "@punctuation.bracket", { fg = symbol_color }) -- скобки (), [], {}
-    vim.api.nvim_set_hl(0, "@punctuation.delimiter", { fg = symbol_color }) -- разделители . , ; :
+    vim.api.nvim_set_hl(0, "@punctuation.bracket", { fg = symbol_color }) -- brackets (), [], {}
+    vim.api.nvim_set_hl(0, "@punctuation.delimiter", { fg = symbol_color }) -- delimiters . , ; :
 
     vim.api.nvim_set_hl(0, "@comment", { fg = "#b8a99a", italic = false })
 end
@@ -124,36 +124,40 @@ local function map_textobjects()
     end)
 end
 
-local function init()
-    require("nvim-treesitter").install(parsers)
-
-    vim.api.nvim_create_autocmd("FileType", {
-        callback = function(args)
-            if not pcall(vim.treesitter.start, args.buf) then
-                return
+vim.api.nvim_create_autocmd("PackChanged", {
+    desc = "Update parsers together with nvim-treesitter",
+    callback = function(ev)
+        if ev.data.spec.name == "nvim-treesitter" and ev.data.kind == "update" then
+            if not ev.data.active then
+                vim.cmd.packadd("nvim-treesitter")
             end
-            local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
-            if not no_indent[lang] and vim.treesitter.query.get(lang, "indents") then
-                vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-            end
-        end,
-    })
+            vim.cmd("TSUpdate")
+        end
+    end,
+})
 
-    require("nvim-treesitter-textobjects").setup({
-        select = { lookahead = true },
-        move = { set_jumps = true },
-    })
-    map_textobjects()
-    apply_syntax_colors()
-end
+vim.pack.add({
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
+})
 
-return {
-    "nvim-treesitter/nvim-treesitter",
-    branch = "main",
-    dependencies = {
-        { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
-    },
-    lazy = false,
-    build = ":TSUpdate",
-    config = init,
-}
+require("nvim-treesitter").install(parsers)
+
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+        if not pcall(vim.treesitter.start, args.buf) then
+            return
+        end
+        local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+        if not no_indent[lang] and vim.treesitter.query.get(lang, "indents") then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+    end,
+})
+
+require("nvim-treesitter-textobjects").setup({
+    select = { lookahead = true },
+    move = { set_jumps = true },
+})
+map_textobjects()
+apply_syntax_colors()

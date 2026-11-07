@@ -1,14 +1,13 @@
-return {
-    "ibhagwan/fzf-lua",
-    cmd = "FzfLua",
-    keys = {
-        { "<Leader>f", "<Cmd>FzfLua files<CR>", desc = "Find a file" },
-        { "<Leader>g", "<Cmd>FzfLua live_grep<CR>", desc = "Search the project" },
-        { "<Leader><Leader>", "<Cmd>FzfLua buffers<CR>", desc = "Switch buffer" },
-        { "<Leader>d", "<Cmd>FzfLua diagnostics_document<CR>", desc = "Diagnostics in the file" },
-        { "<Leader>h", "<Cmd>FzfLua helptags<CR>", desc = "Search help" },
-        { "<Leader>k", "<Cmd>FzfLua keymaps<CR>", desc = "Search mappings" },
-        { "<Leader>r", "<Cmd>FzfLua resume<CR>", desc = "Resume the last search" },
-    },
-    opts = {},
-}
+vim.pack.add({ "https://github.com/ibhagwan/fzf-lua" })
+
+for keys, picker in pairs({
+    ["<Leader>f"] = { "files", "Find a file" },
+    ["<Leader>g"] = { "live_grep", "Search the project" },
+    ["<Leader><Leader>"] = { "buffers", "Switch buffer" },
+    ["<Leader>d"] = { "diagnostics_document", "Diagnostics in the file" },
+    ["<Leader>h"] = { "helptags", "Search help" },
+    ["<Leader>k"] = { "keymaps", "Search mappings" },
+    ["<Leader>r"] = { "resume", "Resume the last search" },
+}) do
+    vim.keymap.set("n", keys, "<Cmd>FzfLua " .. picker[1] .. "<CR>", { desc = picker[2] })
+end
