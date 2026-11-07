@@ -3,7 +3,7 @@
 My NixOS configuration and home settings: one repository for the whole machine.
 
 - `nixos/` — the system: flake, modules, `flake.lock`.
-- `home/` — a stow package installed into `~`: neovim, niri, waybar.
+- `home/` — a stow package installed into `~`: kitty, neovim, niri, waybar.
 - `secrets/` — per-project secrets; only the template is in git.
 
 ## Commands
