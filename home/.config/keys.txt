@@ -1,7 +1,5 @@
-KEYS                                       q closes, / searches
-
 NIRI                                       Mod is Super
-  Mod+/              this sheet
+  Mod+/              this sheet: 1-4 or h/l switch sections, q quits
   Mod+Shift+/        niri's own key list
   Mod+Return         terminal
   Mod+D              app launcher

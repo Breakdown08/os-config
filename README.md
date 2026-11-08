@@ -64,7 +64,7 @@ The default session. Cinnamon stays as the fallback: pick it on the login screen
 
 | Keys | Action |
 |---|---|
-| `Mod+/` | all keys: niri, kitty, Neovim, yazi; the sheet is `home/.config/keys.txt` |
+| `Mod+/` | all keys: niri, kitty, Neovim, yazi; `1`–`4` or `h`/`l` switch sections, `q` quits; the sheet is `home/.config/keys.txt` |
 | `Mod+Shift+/` | niri's own key list |
 | `Mod+Return` | terminal |
 | `Mod+D` | app launcher |

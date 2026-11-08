@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# The key sheet behind Mod+/: 1-9 or h/l switch sections, q quits.
+sheet=~/.config/keys.txt
+mapfile -t names < <(grep -o '^[A-Z]\+' "$sheet")
+n=${#names[@]} i=0
+
+tput civis
+trap 'tput cnorm' EXIT
+while :; do
+    clear
+    for k in "${!names[@]}"; do
+        if ((k == i)); then
+            printf '\e[7m %d %s \e[0m ' $((k + 1)) "${names[k],,}"
+        else
+            printf ' %d %s  ' $((k + 1)) "${names[k],,}"
+        fi
+    done
+    printf '\n\n'
+    awk -v s=$((i + 1)) '/^[A-Z]/ { c++ } c == s' "$sheet"
+
+    # Russian layout: р д й are h l q
+    read -rsn1 key
+    case $key in
+        [1-9]) ((key <= n)) && i=$((key - 1)) ;;
+        h | р) i=$(((i + n - 1) % n)) ;;
+        l | д) i=$(((i + 1) % n)) ;;
+        q | й) exit ;;
+    esac
+done

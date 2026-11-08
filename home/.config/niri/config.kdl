@@ -48,7 +48,7 @@ hotkey-overlay {
 }
 
 binds {
-    Mod+Slash hotkey-overlay-title="All Keys: niri, kitty, Neovim, yazi" { spawn-sh "kitty --class keys less ~/.config/keys.txt"; }
+    Mod+Slash hotkey-overlay-title="All Keys: niri, kitty, Neovim, yazi" { spawn-sh "kitty --class keys ~/.local/bin/keys"; }
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return { spawn "kitty"; }
