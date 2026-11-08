@@ -1,4 +1,4 @@
-// Mod+/ shows all keys
+// Mod+/ shows all keys: niri, kitty, neovim, yazi
 input {
     keyboard {
         xkb {
@@ -35,12 +35,21 @@ screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
 spawn-at-startup "waybar"
 spawn-at-startup "mako"
 
+// The key sheet from Mod+/ floats over the windows.
+window-rule {
+    match app-id="^keys$"
+    open-floating true
+    default-column-width { fixed 760; }
+    default-window-height { proportion 0.9; }
+}
+
 hotkey-overlay {
     hide-not-bound
 }
 
 binds {
-    Mod+Slash { show-hotkey-overlay; }
+    Mod+Slash hotkey-overlay-title="All Keys: niri, kitty, Neovim, yazi" { spawn-sh "kitty --class keys less ~/.config/keys.txt"; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return { spawn "kitty"; }
     Mod+D { spawn "fuzzel"; }

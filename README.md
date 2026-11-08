@@ -64,7 +64,8 @@ The default session. Cinnamon stays as the fallback: pick it on the login screen
 
 | Keys | Action |
 |---|---|
-| `Mod+/` | all keys |
+| `Mod+/` | all keys: niri, kitty, Neovim, yazi; the sheet is `home/.config/keys.txt` |
+| `Mod+Shift+/` | niri's own key list |
 | `Mod+Return` | terminal |
 | `Mod+D` | app launcher |
 | `Mod+H/J/K/L` | move focus |
@@ -90,9 +91,9 @@ Edits to `home/.config/niri/config.kdl` apply immediately.
 | `Ctrl+Shift+Enter` | new window in the same directory |
 | `Alt+H/J/K/L` | focus the neighboring window |
 | `Alt+Shift+H/J/K/L` | move the window in that direction |
+| `Ctrl+Alt+H/J/K/L` | resize the window, `Ctrl+Alt+0` resets |
 | `Ctrl+Shift+L` | side by side / stacked |
 | `Alt+Z` | zoom the window, again to restore |
-| `Ctrl+Shift+R` | resize mode |
 
 ## Neovim
 

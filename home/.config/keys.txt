@@ -1,0 +1,96 @@
+KEYS                                       q closes, / searches
+
+NIRI                                       Mod is Super
+  Mod+/              this sheet
+  Mod+Shift+/        niri's own key list
+  Mod+Return         terminal
+  Mod+D              app launcher
+  Mod+H/J/K/L        move focus
+  Mod+Shift+H/J/K/L  move window
+  Mod+1..5           workspace
+  Mod+Shift+1..5     move column to workspace
+  Mod+O              overview
+  Mod+R              column width: 1/3, 1/2, 2/3
+  Mod+F              maximize column
+  Mod+Shift+F        fullscreen
+  Mod+C              center column
+  Mod+[ / Mod+]      pull window into column / push it out
+  Mod+Q              close window
+  Ctrl+Space         keyboard layout
+  Mod+N              do not disturb
+  Mod+Shift+N        dismiss notifications
+  Print              screenshot of an area
+  Ctrl+Print         screenshot of the screen
+  Alt+Print          screenshot of the window
+  Mod+Alt+L          lock
+  Mod+Shift+E        power menu
+
+KITTY
+  Ctrl+Shift+Enter   new window in the same directory
+  Alt+H/J/K/L        focus the neighboring window
+  Alt+Shift+H/J/K/L  move the window in that direction
+  Ctrl+Alt+H/L       narrower / wider
+  Ctrl+Alt+K/J       shorter / taller
+  Ctrl+Alt+0         reset sizes
+  Ctrl+Shift+L       side by side / stacked / one window
+  Alt+Z              zoom the window, again to restore
+  Ctrl+Shift+T       new tab
+  Ctrl+Shift+. / ,   move tab right / left
+  Ctrl+Shift+Right   next tab (Left for previous)
+  Ctrl+Shift+C / V   copy / paste
+  Ctrl+Shift+H       scrollback in a pager
+  Ctrl+Shift+G       output of the last command in a pager
+  Ctrl+Shift+Z / X   jump to previous / next prompt
+  Ctrl+Shift+= / -   font size up / down, Ctrl+Shift+Backspace resets
+  Ctrl+Shift+F5      reload the config
+
+NEOVIM                                     leader is Space
+  Space f            find a file
+  Space g            search the project
+  Space Space        switch buffer
+  Space r            resume the last search
+  Space d            diagnostics in the file
+  Space k / Space h  search mappings / help
+  Tab                file explorer: edit the directory, save with :w
+  Space [ / Space ]  explorer in the Neovim config / project root
+  Ctrl+H/J/K/L       move between windows
+  Ctrl+Q             close window
+  gd                 go to definition
+  K                  hover
+  grn / grr          rename / references
+  gri / gra          implementation / code action
+  van / in           grow / shrink the selection by syntax node
+  af if ac ic aa ia  function, class, argument text objects
+  ]m [m / ]] [[      next / previous function / class
+  Space a / Space A  swap the argument with the next / previous one
+  Space b            build the C file
+
+YAZI
+  h / l              parent directory / enter or open
+  j / k, gg / G      move, top / bottom
+  H / L              back / forward in history
+  Enter / O          open / open with...
+  Tab                file info
+  Space / v          select / visual selection
+  Ctrl+A / Ctrl+R    select all / invert selection
+  y / x / p          copy / cut / paste, P overwrites
+  d / D              to trash / delete permanently
+  a                  create, end with / for a directory
+  A                  create many in the editor
+  r                  rename; with a selection, all in the editor
+  .                  hidden files
+  f                  filter the list
+  / / ?, n / N       find next / previous, repeat
+  S                  search file contents with ripgrep
+  z                  jump with fzf
+  g Space            cd to a typed path
+  gh / gc / gd       home / ~/.config / ~/Downloads
+  gt                 trash bin
+  cc / cd / cf       copy path / directory / file name
+  ,m ,s ,a           sort by modified / size / name, capital reverses
+  tt, 1..9, [ / ]    new tab, switch tab
+  ; / :              shell command / and wait for it
+  w                  task manager
+  K / J              scroll the preview
+  q / Q              quit / quit without changing directory
+  ~ or F1            all keys
