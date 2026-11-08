@@ -1,8 +1,8 @@
-{ config, pkgs, pkgs-godot, ... }:
+{ config, pkgs, ... }:
 
 let
-  # Godot export templates, from the same pin as the engine: the versions must match
-  godot-templates = pkgs-godot.godot_4_5.export-templates-bin;
+  # Godot export templates must match the engine version
+  godot-templates = pkgs.godot.export-templates-bin;
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
 in
 {
@@ -50,8 +50,6 @@ in
     kitty
     tigervnc
     transmission_4-gtk
-  ] ++ [
-    # Godot 4.5.1 from the pinned commit
-    pkgs-godot.godot_4_5
+    godot
   ];
 }

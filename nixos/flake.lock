@@ -95,27 +95,10 @@
         "type": "github"
       }
     },
-    "nixpkgs-godot": {
-      "locked": {
-        "lastModified": 1789524109,
-        "narHash": "sha256-GZDvT/tbSVQB2KjI86l7VCM5D/vCrJo2sE3PCaaD0oQ=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "be3dab5b1a3c41ed2db86093b9f4e048305630b7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "be3dab5b1a3c41ed2db86093b9f4e048305630b7",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "llm-agents": "llm-agents",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-godot": "nixpkgs-godot"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {
