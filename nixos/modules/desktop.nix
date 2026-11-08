@@ -6,9 +6,9 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.cinnamon.enable = true;
 
-  # niri is a second session, picked on the login screen; settings in home/.config/niri
+  # niri is the default session, Cinnamon stays on the login screen as the fallback; settings in home/.config/niri
   programs.niri.enable = true;
-  services.displayManager.defaultSession = "cinnamon";
+  services.displayManager.defaultSession = "niri";
   security.pam.services.swaylock = { };
   # Browsers and Electron run native Wayland under niri; the variable does nothing under X11
   environment.sessionVariables.NIXOS_OZONE_WL = "1";

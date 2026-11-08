@@ -60,7 +60,7 @@ Run `git add` on any new file in `nixos/` first: a flake only sees files known t
 
 ## niri
 
-Runs next to Cinnamon: pick the session on the login screen. Cinnamon stays the default.
+The default session. Cinnamon stays as the fallback: pick it on the login screen.
 
 | Keys | Action |
 |---|---|
