@@ -90,7 +90,8 @@ Edits to `home/.config/niri/config.kdl` apply immediately.
 | `Ctrl+Shift+Enter` | new window in the same directory |
 | `Alt+H/J/K/L` | focus the neighboring window |
 | `Alt+Shift+H/J/K/L` | move the window in that direction |
-| `Ctrl+Shift+L` | next layout |
+| `Ctrl+Shift+L` | side by side / stacked |
+| `Alt+Z` | zoom the window, again to restore |
 | `Ctrl+Shift+R` | resize mode |
 
 ## Neovim
