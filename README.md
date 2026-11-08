@@ -85,7 +85,13 @@ Edits to `home/.config/niri/config.kdl` apply immediately.
 
 ## kitty
 
-`Ctrl+Shift+Enter` opens a window next to the current one, in the same directory.
+| Keys | Action |
+|---|---|
+| `Ctrl+Shift+Enter` | new window in the same directory |
+| `Alt+H/J/K/L` | focus the neighboring window |
+| `Alt+Shift+H/J/K/L` | move the window in that direction |
+| `Ctrl+Shift+L` | next layout |
+| `Ctrl+Shift+R` | resize mode |
 
 ## Neovim
 
