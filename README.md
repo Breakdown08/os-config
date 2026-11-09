@@ -118,6 +118,7 @@ Leader is `Space`. LSP uses the Nvim defaults: `grn` rename, `grr` references, `
 | `]m` `[m` / `]]` `[[` | next / previous function / class |
 | `Space a` / `Space A` | swap the argument with the next / previous one |
 | `Space b` | build the C file |
+| `Ctrl+J/K` / `Tab` | insert mode: walk the completion menu; `Tab` at the line start indents |
 
 ## New machine
 

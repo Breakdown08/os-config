@@ -62,6 +62,8 @@ NEOVIM                                     leader is Space
   ]m [m / ]] [[      next / previous function / class
   Space a / Space A  swap the argument with the next / previous one
   Space b            build the C file
+  Ctrl+J / Ctrl+K    insert: walk the completion menu
+  Tab                insert: completion after a word, else indent
 
 YAZI
   h / l              parent directory / enter or open
