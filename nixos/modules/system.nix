@@ -12,7 +12,7 @@
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Asia/Ho_Chi_Minh";
 
   i18n.defaultLocale = "en_US.UTF-8";
 
