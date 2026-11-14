@@ -22,6 +22,9 @@ window#waybar {
 #language,
 #wireplumber,
 #battery,
+#cpu,
+#memory,
+#disk,
 #network,
 #custom-notifications,
 #tray {
