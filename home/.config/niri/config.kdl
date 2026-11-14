@@ -29,6 +29,9 @@ layout {
     }
 }
 
+// Prompter mode (Mod+Alt+P) writes struts here: a strip on top for the prompter, cropped off in OBS.
+include optional=true "~/.local/state/prompter/niri.kdl"
+
 prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
 
@@ -41,6 +44,17 @@ window-rule {
     open-floating true
     default-column-width { fixed 760; }
     default-window-height { proportion 0.9; }
+}
+
+// The prompter floats in the strip under the camera, never takes focus, hidden from screencasts.
+window-rule {
+    match app-id="^prompter$"
+    open-floating true
+    open-focused false
+    default-column-width { fixed 500; }
+    default-window-height { fixed 62; }
+    default-floating-position x=0 y=0 relative-to="top"
+    block-out-from "screencast"
 }
 
 hotkey-overlay {
@@ -94,6 +108,16 @@ binds {
 
     Mod+N hotkey-overlay-title="Do Not Disturb" { spawn "sh" "-c" "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar"; }
     Mod+Shift+N hotkey-overlay-title="Dismiss Notifications" { spawn "sh" "-c" "makoctl dismiss --all && pkill -RTMIN+8 waybar"; }
+
+    Mod+Alt+P hotkey-overlay-title="Prompter Mode: Strip on Top for Recording" { spawn-sh "~/.local/bin/prompter mode"; }
+    Mod+Alt+S hotkey-overlay-title="Prompter: Show / Hide ~/Videos/speech.md" { spawn-sh "~/.local/bin/prompter show"; }
+    // Arrows, not J/K: Mod+Alt+L next to them locks the screen, and a slip once did it mid-recording.
+    Mod+Alt+Down hotkey-overlay-title="Prompter: Next / Previous Phrase" { spawn-sh "~/.local/bin/prompter next"; }
+    Mod+Alt+Up { spawn-sh "~/.local/bin/prompter prev"; }
+    Mod+Alt+R hotkey-overlay-title="Prompter: Reload the Speech" { spawn-sh "~/.local/bin/prompter reload"; }
+    Mod+Alt+W hotkey-overlay-title="Cast the Focused Window" { set-dynamic-cast-window; }
+    Mod+Alt+M hotkey-overlay-title="Cast the Focused Monitor" { set-dynamic-cast-monitor; }
+    Mod+Alt+C hotkey-overlay-title="Clear Cast Target" { clear-dynamic-cast-target; }
 
     Print { screenshot; }
     Ctrl+Print hotkey-overlay-title="Screenshot Screen" { screenshot-screen; }

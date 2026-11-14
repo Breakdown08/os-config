@@ -1,6 +1,8 @@
 {
   "layer": "top",
   "height": 28,
+  // Prompter mode (Mod+Alt+P) moves the bar under the prompter strip.
+  "include": ["~/.local/state/prompter/waybar.jsonc"],
   "modules-left": ["niri/workspaces", "niri/window"],
   "modules-center": ["clock"],
   "modules-right": ["niri/language", "wireplumber", "battery", "network", "custom/notifications", "tray"],

@@ -21,6 +21,12 @@ NIRI                                       Mod is Super
   Ctrl+Print         screenshot of the screen
   Alt+Print          screenshot of the window
   Mod+Alt+L          lock
+  Mod+Alt+P          prompter mode: strip on top for recording
+  Mod+Alt+S          prompter: show / hide ~/Videos/speech.md
+  Mod+Alt+Down / Up  prompter: next / previous phrase
+  Mod+Alt+R          prompter: reload the speech
+  Mod+Alt+W / M      cast the focused window / monitor
+  Mod+Alt+C          clear the cast target
   Mod+Shift+E        power menu
 
 KITTY

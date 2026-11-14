@@ -78,11 +78,17 @@ The default session. Cinnamon stays as the fallback: pick it on the login screen
 | `Mod+N` / `Mod+Shift+N` | do not disturb / dismiss notifications |
 | `Print` | screenshot of an area |
 | `Mod+Alt+L` | lock |
+| `Mod+Alt+P` | prompter mode: a strip on top for the prompter, cropped off in OBS to 16:9 |
+| `Mod+Alt+S` | show / hide the prompter, in prompter mode |
+| `Mod+Alt+Down/Up` / `Mod+Alt+R` | next / previous phrase / reload the speech |
+| `Mod+Alt+W/M` / `Mod+Alt+C` | cast the focused window / monitor / clear the cast target |
 | `Mod+Shift+E` | power menu: power off, reboot, log out |
 
 Notifications pop up one at a time for five seconds. The bell on waybar counts them: click toggles do not disturb, right click dismisses all.
 
 Edits to `home/.config/niri/config.kdl` apply immediately.
+
+The prompter shows `~/Videos/speech.md` one phrase at a time and is hidden from screencasts; the format is in `home/Videos/speech.md.example`. Prompter mode stays on across reboots until toggled off.
 
 ## kitty
 

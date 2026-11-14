@@ -1,0 +1,32 @@
+# Speech format for the prompter
+
+The prompter (`Mod+Alt+S` in prompter mode) always reads `~/Videos/speech.md`.
+Copy this file there and write your own speech. `Mod+Alt+R` rereads it without closing the window.
+
+Only lines starting with `>` reach the screen. Everything else is yours: plans, links, drafts.
+If the file has a `## Сценарий` section, only that section is read, up to the next `## ` heading.
+Without one, the whole file is read.
+
+## Сценарий
+
+### Intro
+
+> *[A heading of three hashes names a block: it shows above the current phrase with its number.]*
+
+> A plain quote line is direct speech, in yellow; the current phrase is bold.
+
+> Wrap a word in double asterisks to **stress** it while you speak.
+
+> `Backticks` are dropped, so code names read as plain words.
+
+### Demo
+
+> *(Parentheses in italics are an action: open a file, switch a window. Bold cyan, stepped like speech.)*
+
+> *[Square brackets in italics are a note: a topic, a pause. Grey, shown ahead, skipped when stepping.]*
+
+> One phrase per line: `Mod+Alt+Down` goes to the next one, `Mod+Alt+Up` back.
+
+## After the section
+
+> This line is past the section, so the prompter never shows it.

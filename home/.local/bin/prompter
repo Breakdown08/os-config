@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Teleprompter for recording videos: one phrase of ~/Videos/speech.md at a time, stepped by niri binds.
+
+    prompter mode     toggle prompter mode: a strip on top of the screen for the prompter, cropped off in OBS
+    prompter show     open or close the prompter window, only in prompter mode
+    prompter next     next phrase; prev, reload likewise
+    prompter run      the prompter itself, what the window runs
+
+The format of speech.md is in ~/Videos/speech.md.example.
+"""
+
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import textwrap
+from collections.abc import Callable
+from pathlib import Path
+from types import FrameType
+from typing import Literal, NamedTuple
+
+SPEECH: Path = Path.home() / "Videos/speech.md"
+SECTION: str = "## Сценарий"
+STATE: Path = Path.home() / ".local/state/prompter"  # included by the niri and waybar configs
+PID: Path = Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / "prompter.pid"
+
+# A 3:2 screen 1097 px high keeps 925 px of 16:9 under a 172 px strip; waybar sits right below it.
+STRIP: int = 172
+BAR: int = 28
+NIRI: str = f"layout {{\n    struts {{\n        top {STRIP + BAR}\n    }}\n}}\n"
+WAYBAR: str = f'{{ "margin-top": {STRIP}, "exclusive": false }}\n'
+
+DIM: str = "\033[2m"
+BOLD: str = "\033[1m"
+RESET: str = "\033[0m"
+SAY: str = "\033[33m"
+DO: str = "\033[1;36m"
+NOTE: str = "\033[90m"
+MARK: str = "\033[1;4m"
+ERROR: str = "\033[31m"
+ROWS: int = 5  # the block, the current phrase, then the next ones
+
+
+type Kind = Literal["say", "do", "note"]
+
+
+class Phrase(NamedTuple):
+    block: str
+    text: str
+    kind: Kind
+
+
+def phrases(text: str) -> list[Phrase]:
+    """The `>` lines of the «## Сценарий» section, or of the whole file without one."""
+    section: re.Match[str] | None = re.search(rf"^{SECTION}$", text, re.MULTILINE)
+    if section:
+        text = text[section.end() :]
+        end: int = text.find("\n## ")
+        if end != -1:
+            text = text[:end]
+    block: str = ""
+    found: list[Phrase] = []
+    line: str
+    for line in text.splitlines():
+        if line.startswith("### "):
+            block = line[4:]
+        elif line.startswith(">") and line[1:].strip():
+            said: str = line[1:].strip()
+            if said.startswith("*(") and said.endswith(")*"):
+                found.append(Phrase(block, said.strip("*()"), "do"))
+            elif said.startswith("*[") and said.endswith("]*"):
+                found.append(Phrase(block, said.strip("*[]"), "note"))
+            else:
+                found.append(Phrase(block, said.replace("`", ""), "say"))
+    return found
+
+
+def paint(lines: list[str], style: str) -> list[str]:
+    """Styles wrapped lines; **marked** words stand out, even across a line break."""
+    painted: list[str] = []
+    marked: bool = False
+    line: str
+    for line in lines:
+        out: str = style + (MARK if marked else "")
+        i: int
+        part: str
+        for i, part in enumerate(line.split("**")):
+            if i:
+                marked = not marked
+                out += MARK if marked else RESET + style
+            out += part
+        painted.append(out + RESET)
+    return painted
+
+
+class Prompter:
+    def __init__(self, path: Path) -> None:
+        self.path: Path = path
+        self.items: list[Phrase] = []
+        self.error: str = ""
+        self.index: int = 0
+        self.load()
+
+    def load(self) -> None:
+        """Reads the speech; on a problem keeps the error to show and waits for a reload."""
+        try:
+            self.items = phrases(self.path.read_text())
+        except OSError as error:
+            self.items, self.error = [], f"cannot read {self.path}: {error.strerror}"
+            return
+        if not any(item.kind != "note" for item in self.items):
+            self.items, self.error = [], f"no phrases in {self.path}: write them as > lines"
+            return
+        self.error = ""
+        self.index = min(self.index, len(self.items) - 1)
+        self.skip(1)
+
+    def skip(self, delta: int) -> None:
+        """Off notes, onward in the given direction; back the other way at either end."""
+        while self.items[self.index].kind == "note":
+            if not 0 <= self.index + delta < len(self.items):
+                delta = -delta
+            self.index += delta
+
+    def step(self, delta: int) -> None:
+        if self.items:
+            self.index = max(0, min(len(self.items) - 1, self.index + delta))
+            self.skip(delta)
+        self.render()
+
+    def reload(self) -> None:
+        self.load()
+        self.render()
+
+    @staticmethod
+    def show(phrase: Phrase, width: int, now: bool) -> list[str]:
+        style: str = {"do": DO, "note": NOTE}.get(phrase.kind, f"{BOLD}{SAY}" if now else f"{DIM}{SAY}")
+        lines: list[str] = textwrap.wrap(phrase.text, width - 2) or [""]
+        lines = [("▶ " if now else "  ") + lines[0]] + ["  " + line for line in lines[1:]]
+        return paint(lines, style)
+
+    def render(self) -> None:
+        width: int = shutil.get_terminal_size().columns - 2
+        lines: list[str]
+        if self.error:
+            lines = [f"{ERROR}{line}{RESET}" for line in textwrap.wrap(self.error, width)]
+            lines.append(f"{DIM}fix it, then Mod+Alt+R reloads; the format is in {SPEECH.name}.example{RESET}")
+        else:
+            current: Phrase = self.items[self.index]
+            lines = [f"{DIM}{current.block}  ·  {self.index + 1}/{len(self.items)}{RESET}"]
+            lines += self.show(current, width, now=True)
+            ahead: Phrase
+            for ahead in self.items[self.index + 1 :]:
+                if len(lines) >= ROWS:
+                    break
+                lines += self.show(ahead, width, now=False)
+        sys.stdout.write("\033[2J\033[H\033[?25l" + "\n".join(lines[:ROWS]))
+        sys.stdout.flush()
+
+
+def run() -> None:
+    prompter: Prompter = Prompter(SPEECH)
+
+    def on(delta: int) -> Callable[[int, FrameType | None], None]:
+        def handler(_signum: int, _frame: FrameType | None) -> None:
+            prompter.step(delta)
+
+        return handler
+
+    signal.signal(signal.SIGUSR1, on(1))
+    signal.signal(signal.SIGUSR2, on(-1))
+    signal.signal(signal.SIGRTMIN, lambda _s, _f: prompter.reload())
+    signal.signal(signal.SIGWINCH, lambda _s, _f: prompter.render())
+    # Closing the window hangs up; either way leave through finally to drop the pid file.
+    signal.signal(signal.SIGHUP, lambda _s, _f: sys.exit())
+    signal.signal(signal.SIGTERM, lambda _s, _f: sys.exit())
+    PID.write_text(str(os.getpid()))
+    try:
+        prompter.render()
+        while True:
+            signal.pause()
+    finally:
+        PID.unlink(missing_ok=True)
+
+
+def send(signum: int) -> bool:
+    """Signals the running prompter; False when there is none."""
+    try:
+        os.kill(int(PID.read_text()), signum)
+    except (OSError, ValueError):
+        return False
+    return True
+
+
+def mode() -> None:
+    on: bool = not (STATE / "niri.kdl").exists()
+    if on:
+        STATE.mkdir(parents=True, exist_ok=True)
+        (STATE / "niri.kdl").write_text(NIRI)
+        (STATE / "waybar.jsonc").write_text(WAYBAR)
+    else:
+        send(signal.SIGTERM)
+        (STATE / "niri.kdl").unlink(missing_ok=True)
+        (STATE / "waybar.jsonc").unlink(missing_ok=True)
+    subprocess.run(["niri", "msg", "action", "load-config-file"], check=False)
+    subprocess.run(["pkill", "-USR2", "waybar"], check=False)
+
+
+def show() -> None:
+    if send(signal.SIGTERM) or not (STATE / "niri.kdl").exists():
+        return
+    subprocess.Popen(
+        ["kitty", "--class", "prompter", "-o", "background_opacity=0.6", "-o", "font_size=7.5",
+         "-o", "confirm_os_window_close=0", sys.argv[0], "run"],
+        start_new_session=True,
+    )
+
+
+def main() -> None:
+    commands: dict[str, Callable[[], object]] = {
+        "mode": mode,
+        "show": show,
+        "run": run,
+        "next": lambda: send(signal.SIGUSR1),
+        "prev": lambda: send(signal.SIGUSR2),
+        "reload": lambda: send(signal.SIGRTMIN),
+    }
+    if len(sys.argv) != 2 or sys.argv[1] not in commands:
+        sys.exit(__doc__)
+    commands[sys.argv[1]]()
+
+
+if __name__ == "__main__":
+    main()
