@@ -2,6 +2,9 @@
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # binary cache for llm-agents (Claude Code, Codex); flake nixConfig alone is ignored for untrusted users
+  nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
+  nix.settings.extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.android_sdk.accept_license = true;

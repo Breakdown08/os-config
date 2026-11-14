@@ -13,8 +13,8 @@
 
     # AI agents: Claude Code + Codex CLI
     llm-agents = {
+      # own nixpkgs, not follows: packages then match cache.numtide.com and are not built locally
       url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
