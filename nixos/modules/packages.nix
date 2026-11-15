@@ -26,9 +26,6 @@ in
     chromium
     android-studio
     android-tools
-    androidenv.androidPkgs.androidsdk
-    androidenv.androidPkgs.emulator
-    androidenv.androidPkgs.ndk-bundle
     jdk
     netbird-ui
     telegram-desktop
