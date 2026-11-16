@@ -1,0 +1,17 @@
+# Hidden under niri: comes with the Cinnamon fallback session
+[Desktop Entry]
+NotShowIn=niri;
+Name=Pix
+Comment=View and organize your images
+Keywords=Image;Viewer;
+Categories=GNOME;GTK;Graphics;Viewer;RasterGraphics;2DGraphics;Photography;
+Exec=pix %U
+Icon=pix
+MimeType=image/bmp;image/jpeg;image/gif;image/png;image/tiff;image/x-bmp;image/x-ico;image/x-png;image/x-pcx;image/x-tga;image/xpm;image/svg+xml;image/webp;image/jxl;
+StartupNotify=true
+Terminal=false
+Type=Application
+Actions=new-window
+[Desktop Action new-window]
+Name=New Window
+Exec=pix --new-window
