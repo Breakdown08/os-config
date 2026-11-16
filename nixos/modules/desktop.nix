@@ -2,6 +2,8 @@
 
 {
   services.xserver.enable = true;
+  # xterm is the X11 default, kitty replaces it and Cinnamon does not need it
+  services.xserver.excludePackages = [ pkgs.xterm ];
 
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.cinnamon.enable = true;
