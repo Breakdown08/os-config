@@ -33,8 +33,6 @@
     LC_TIME = "ru_RU.UTF-8";
   };
 
-  services.printing.enable = true;
-
   # PipeWire
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
