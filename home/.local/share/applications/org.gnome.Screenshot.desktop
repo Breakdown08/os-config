@@ -1,0 +1,8 @@
+# Comes with Cinnamon; under niri it needs GNOME Shell and silently does nothing.
+# niri takes screenshots itself: Print, Ctrl+Print, Alt+Print.
+[Desktop Entry]
+Type=Application
+Name=Screenshot
+Exec=gnome-screenshot --interactive
+Icon=org.gnome.Screenshot
+NotShowIn=niri;KDE;
