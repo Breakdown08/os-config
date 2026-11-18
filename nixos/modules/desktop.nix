@@ -18,6 +18,8 @@
   security.pam.services.swaylock = { };
   # Browsers and Electron run native Wayland under niri; the variable does nothing under X11
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  # shared-mime-info names mkv video/matroska, Celluloid only declares video/x-matroska and xdg-open under niri finds nothing
+  xdg.mime.defaultApplications."video/matroska" = "io.github.celluloid_player.Celluloid.desktop";
   environment.systemPackages = with pkgs; [
     xwayland-satellite # X11 apps under niri, niri starts it itself
     wl-clipboard
