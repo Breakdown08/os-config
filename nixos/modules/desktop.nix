@@ -7,6 +7,8 @@
 
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.cinnamon.enable = true;
+  # mpv replaces Cinnamon's Celluloid
+  environment.cinnamon.excludePackages = [ pkgs.celluloid ];
 
   # niri is the default session, Cinnamon stays on the login screen as the fallback; settings in home/.config/niri
   programs.niri.enable = true;
@@ -18,8 +20,8 @@
   security.pam.services.swaylock = { };
   # Browsers and Electron run native Wayland under niri; the variable does nothing under X11
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  # shared-mime-info names mkv video/matroska, Celluloid only declares video/x-matroska and xdg-open under niri finds nothing
-  xdg.mime.defaultApplications."video/matroska" = "io.github.celluloid_player.Celluloid.desktop";
+  # shared-mime-info names mkv video/matroska, mpv only declares video/x-matroska and xdg-open under niri finds nothing
+  xdg.mime.defaultApplications."video/matroska" = "mpv.desktop";
   environment.systemPackages = with pkgs; [
     xwayland-satellite # X11 apps under niri, niri starts it itself
     wl-clipboard
@@ -28,6 +30,7 @@
     mako
     swaylock
     brightnessctl
+    mpv
   ];
 
   services.xserver.xkb = {
