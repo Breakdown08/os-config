@@ -3,6 +3,6 @@
   environment.systemPackages = [
     inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
     inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex
-    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.gemini-cli
+    pkgs.antigravity-cli
   ];
 }
