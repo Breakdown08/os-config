@@ -107,6 +107,8 @@ Plugins are managed by the built-in `vim.pack`: the first start installs them at
 
 Leader is `Space`. LSP uses the Nvim defaults: `grn` rename, `grr` references, `gri` implementation, `gra` code action, `K` hover.
 
+Saving formats Lua with stylua and GDScript with gdscript-formatter. In `.gd` files the LSP is the Godot editor itself: it attaches when Godot has the project open (port 6005); after starting Godot, reopen the buffer with `:e`.
+
 | Keys | Action |
 |---|---|
 | `Space f` / `Space g` | find a file / search the project |

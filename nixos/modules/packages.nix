@@ -48,5 +48,6 @@ in
     tigervnc
     transmission_4-gtk
     godot
+    gdscript-formatter
   ];
 }
