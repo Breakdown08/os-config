@@ -15,6 +15,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   # PSR1 exits on the eDP panel flash a strip along the top edge; costs a little idle battery
   boot.kernelParams = [ "i915.enable_psr=0" ];
+  # AX201 Bluetooth drops SCO packets when USB autosuspend kicks in: headset mic (HFP) unusable
+  boot.extraModprobeConfig = "options btusb enable_autosuspend=0";
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
