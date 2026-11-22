@@ -43,6 +43,7 @@ in
     vial
     qmk-udev-rules
     usbutils
+    alsa-utils
     nix-index
     kitty
     tigervnc

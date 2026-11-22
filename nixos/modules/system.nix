@@ -13,6 +13,8 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # PSR1 exits on the eDP panel flash a strip along the top edge; costs a little idle battery
+  boot.kernelParams = [ "i915.enable_psr=0" ];
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;

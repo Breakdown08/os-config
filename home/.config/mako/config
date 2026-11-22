@@ -23,3 +23,22 @@ invisible=1
 invisible=1
 default-timeout=0
 ignore-timeout=1
+
+# Korrektor: Margot's correction and subtitle as a translucent strip at the top center.
+# Last, so it beats do-not-disturb: a hint matters exactly while she is talking.
+[app-name=korrektor-hint]
+anchor=top-center
+layer=overlay
+width=960
+height=300
+outer-margin=6
+padding=10,18
+font=Hurmit Nerd Font 13
+background-color=#1e1e2ecc
+text-color=#cdd6f4
+border-color=#89b4fa66
+border-radius=12
+format=%b
+text-alignment=center
+invisible=0
+ignore-timeout=0
