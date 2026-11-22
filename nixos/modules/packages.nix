@@ -6,11 +6,29 @@ let
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
   home = config.users.users.breakdown.home;
   # Playwright cannot download browsers on NixOS; take the ones built for its driver
-  playwright-browsers = pkgs.playwright-driver.browsers.override {
+  playwright-browsers-unwrapped = pkgs.playwright-driver.browsers.override {
     withFirefox = false;
     withWebkit = false;
     withFfmpeg = false;
   };
+  # Under WAYLAND_DISPLAY, ANGLE asks SwiftShader for a Wayland surface it lacks and headless WebGL dies
+  playwright-browsers =
+    pkgs.runCommand "playwright-browsers" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+      ''
+        mkdir $out
+        for entry in ${playwright-browsers-unwrapped}/*; do
+          ln -s "$(readlink -f "$entry")" "$out/$(basename "$entry")"
+        done
+        for dir in $out/chromium_headless_shell-*; do
+          src=$(readlink -f "$dir")
+          rm "$dir"
+          cp -rs "$src" "$dir"
+          chmod -R u+w "$dir"
+          shell="$dir/chrome-headless-shell-linux64/chrome-headless-shell"
+          rm "$shell"
+          makeWrapper "$src/chrome-headless-shell-linux64/chrome-headless-shell" "$shell" --unset WAYLAND_DISPLAY
+        done
+      '';
 in
 {
   systemd.tmpfiles.rules = [
