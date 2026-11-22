@@ -5,6 +5,12 @@ let
   godot-templates = pkgs.godot.export-templates-bin;
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
   home = config.users.users.breakdown.home;
+  # Playwright cannot download browsers on NixOS; take the ones built for its driver
+  playwright-browsers = pkgs.playwright-driver.browsers.override {
+    withFirefox = false;
+    withWebkit = false;
+    withFfmpeg = false;
+  };
 in
 {
   systemd.tmpfiles.rules = [
@@ -16,6 +22,11 @@ in
     "d ${home}/.local/share/godot/export_templates 0755 breakdown users -"
     "L+ ${home}/.local/share/godot/export_templates/${godot-templates-dir} - - - - ${godot-templates}/share/godot/export_templates/${godot-templates-dir}"
   ];
+
+  environment.sessionVariables = {
+    PLAYWRIGHT_BROWSERS_PATH = "${playwright-browsers}";
+    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
+  };
 
   environment.systemPackages = with pkgs; [
     xclip
@@ -38,7 +49,7 @@ in
     stow
     clang
     uv
-    python3
+    (python3.withPackages (ps: [ ps.playwright ]))
     ruff
     ty
     k3d
