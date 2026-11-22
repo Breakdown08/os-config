@@ -4,13 +4,17 @@ let
   # Godot export templates must match the engine version
   godot-templates = pkgs.godot.export-templates-bin;
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
+  home = config.users.users.breakdown.home;
 in
 {
-  # Godot looks for templates only in ~/.local/share/godot/export_templates/<version>
   systemd.tmpfiles.rules = [
-    "d ${config.users.users.breakdown.home}/.local/share/godot 0755 breakdown users -"
-    "d ${config.users.users.breakdown.home}/.local/share/godot/export_templates 0755 breakdown users -"
-    "L+ ${config.users.users.breakdown.home}/.local/share/godot/export_templates/${godot-templates-dir} - - - - ${godot-templates}/share/godot/export_templates/${godot-templates-dir}"
+    # gh and butler keep their tokens here: readable only by the user
+    "d ${home}/.config/gh 0700 breakdown users -"
+    "d ${home}/.config/itch 0700 breakdown users -"
+    # Godot looks for templates only in ~/.local/share/godot/export_templates/<version>
+    "d ${home}/.local/share/godot 0755 breakdown users -"
+    "d ${home}/.local/share/godot/export_templates 0755 breakdown users -"
+    "L+ ${home}/.local/share/godot/export_templates/${godot-templates-dir} - - - - ${godot-templates}/share/godot/export_templates/${godot-templates-dir}"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -22,6 +26,7 @@ in
     fzf
     ripgrep
     git
+    gh
     vivaldi
     chromium
     android-studio
@@ -50,5 +55,6 @@ in
     transmission_4-gtk
     godot
     gdscript-formatter
+    butler
   ];
 }

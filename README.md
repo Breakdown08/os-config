@@ -163,6 +163,15 @@ sudo nixos-rebuild switch
 stow -d ~/os-config -t ~ home
 ```
 
+## GitHub and itch.io
+
+Log in once after a new install. The tokens stay in `~/.config/gh` and `~/.config/itch`, readable only by the user.
+
+```bash
+gh auth login -h github.com -p ssh --skip-ssh-key
+butler login
+```
+
 ## Secrets
 
 Never put secrets in `.nix` files: everything there lands in `/nix/store`, readable by all users. The variables are available only inside the project.
