@@ -27,6 +27,8 @@ NIRI                                       Mod is Super
   Mod+Alt+R          prompter: reload the speech
   Mod+Alt+W / M      cast the focused window / monitor
   Mod+Alt+C          clear the cast target
+  Mod+Alt+F          korrektor: wake now
+  Mod+Alt+Shift+F    korrektor: skip the next wake
   Mod+Shift+E        power menu
 
 KITTY

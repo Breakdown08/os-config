@@ -82,6 +82,7 @@ The default session. Cinnamon stays as the fallback: pick it on the login screen
 | `Mod+Alt+S` | show / hide the prompter, in prompter mode |
 | `Mod+Alt+Down/Up` / `Mod+Alt+R` | next / previous phrase / reload the speech |
 | `Mod+Alt+W/M` / `Mod+Alt+C` | cast the focused window / monitor / clear the cast target |
+| `Mod+Alt+F` / `Mod+Alt+Shift+F` | Korrektor: wake now / skip the next wake |
 | `Mod+Shift+E` | power menu: power off, reboot, log out |
 
 Notifications pop up one at a time for five seconds. The bell on waybar counts them: click toggles do not disturb, right click dismisses all.
