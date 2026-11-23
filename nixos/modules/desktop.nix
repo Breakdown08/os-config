@@ -31,6 +31,7 @@
     swaylock
     brightnessctl
     mpv
+    losslesscut-bin # lossless trim and cut, no re-encode
   ];
 
   services.xserver.xkb = {
