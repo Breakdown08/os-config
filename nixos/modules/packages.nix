@@ -5,6 +5,8 @@ let
   godot-templates = pkgs.godot.export-templates-bin;
   godot-templates-dir = builtins.replaceStrings [ "-" ] [ "." ] godot-templates.version;
   home = config.users.users.breakdown.home;
+  # The SDK godot-mono wraps: one SDK for the editor and for dotnet build
+  dotnet-sdk = pkgs.dotnetCorePackages.sdk_8_0-source;
   # Playwright cannot download browsers on NixOS; take the ones built for its driver
   playwright-browsers-unwrapped = pkgs.playwright-driver.browsers.override {
     withFirefox = false;
@@ -44,6 +46,9 @@ in
   environment.sessionVariables = {
     PLAYWRIGHT_BROWSERS_PATH = "${playwright-browsers}";
     PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
+    # Godot .NET finds hostfxr through DOTNET_ROOT
+    DOTNET_ROOT = "${dotnet-sdk}/share/dotnet";
+    DOTNET_CLI_TELEMETRY_OPTOUT = "1";
   };
 
   environment.systemPackages = with pkgs; [
@@ -83,6 +88,8 @@ in
     tigervnc
     transmission_4-gtk
     godot
+    godot-mono
+    dotnet-sdk
     gdscript-formatter
     butler
   ];
